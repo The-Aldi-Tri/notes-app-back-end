@@ -1,13 +1,14 @@
-const Hapi = require('@hapi/hapi');
-const routes = require('./routes');
+const Hapi = require("@hapi/hapi");
+const routes = require("./routes");
 
 const init = async () => {
   const server = Hapi.server({
-    port: 5000,
-    host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
+    port: 3000,
+    // host: process.env.NODE_ENV !== "production" ? "localhost" : "0.0.0.0",
+    host: process.env.NODE_ENV !== "production" ? "127.0.0.1" : "0.0.0.0", // For docker container don't understand localhost
     routes: {
       cors: {
-        origin: ['*'],
+        origin: ["*"],
       },
     },
   });
