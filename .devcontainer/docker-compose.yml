@@ -1,11 +1,15 @@
 version: "3.8"
+
+name: note-app-back-end
 services:
   devcontainer:
     image: mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm
     volumes:
       - ../..:/workspaces:cached
-    network_mode: service:db
+    # network_mode: service:db
     command: sleep infinity
+    networks:
+      - my-network
 
   db:
     image: postgres:16.3-bookworm
@@ -17,6 +21,26 @@ services:
       POSTGRES_PASSWORD: ${PGPASSWORD}
       POSTGRES_USER: ${PGUSER}
       POSTGRES_DB: ${PGDATABASE}
+    ports:
+      - 5432:5432
+    networks:
+      - my-network
+
+  mq:
+    image: rabbitmq:3.12-management
+    restart: unless-stopped
+    # network_mode: service:db
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - my-network
 
 volumes:
   postgres-data:
+  rabbitmq-data:
+
+networks:
+  my-network:
